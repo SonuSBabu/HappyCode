@@ -1,0 +1,62 @@
+#include<stdio.h>
+#include<GL/glut.h>
+int xm,ym,xmm,ymm;
+int first=0;
+
+void display()
+{
+	glClearColor(1,1,1,1);
+	glClear(GL_COLOR_BUFFER_BIT);
+	glColor3f(1,0,0);
+	glRectf(200,200,300,300);
+	glFlush();
+}
+
+void Init()
+{
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	gluOrtho2D(0,500,0,500);
+	glMatrixMode(GL_MODELVIEW);
+}
+
+void mouse(int btn, int state, int x, int y)
+{
+	if(btn==GLUT_LEFT_BUTTON && state==GLUT_DOWN)
+	{
+		xm=x;
+		ym=500-y;
+		glColor3f(0,0,1);
+		glLogicOp(GL_XOR);
+		first=0;
+	}
+}
+
+void move(int x, int y)
+{
+	if(first==1)
+	{
+		glRectf(xm,ym,xmm,ymm);
+		glFlush();
+	}
+	xmm=x;
+	ymm=500-y;
+	glRectf(xm,ym,xmm,ymm);
+	glFlush();
+	first=1;	
+}
+
+void main(int argc, char **argv)
+{
+	glutInit(&argc,argv);
+	glutInitDisplayMode(GLUT_RGB|GLUT_SINGLE);
+	glutInitWindowPosition(0,0);
+	glutInitWindowSize(500,500);
+	glutCreateWindow("LINE");
+	glutDisplayFunc(display);
+	glutMouseFunc(mouse);
+	glutMotionFunc(move);
+	Init();
+	glEnable(GL_COLOR_LOGIC_OP);
+	glutMainLoop();
+}
