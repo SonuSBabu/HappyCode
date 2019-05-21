@@ -1,0 +1,69 @@
+#include <GL/glut.h>
+
+int xm,ym,xmm,ymm;
+int click=0;
+
+void display()
+{
+	glClearColor (0.0, 0.0, 0.0, 1.0);
+	glClear(GL_COLOR_BUFFER_BIT);
+	glFlush();
+}
+
+void init()
+{
+
+	glColor3f(1.0, 0.0, 0.0);
+	glMatrixMode (GL_PROJECTION);
+	glLoadIdentity ();
+	gluOrtho2D(0.0, 500.0, 0.0, 500.0);
+        glMatrixMode(GL_MODELVIEW);
+}
+
+void mouse(int button, int state, int x, int y)
+{
+     if( button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
+     {
+	glLogicOp(GL_XOR);
+	xm=x;
+	ym=500-y;
+	click=0;
+     }
+}
+
+void move(int x,int y)
+{
+	glColor3f(1.0, 0.0, 0.0);
+	if(click==1)
+	{
+		glBegin(GL_LINES);
+		glVertex2f(xm,ym);
+		glVertex2f(xmm,ymm);
+		glEnd();
+		glFlush();
+	}
+	xmm=x;
+	ymm=500-y;
+	glBegin(GL_LINES);
+	glVertex2f(xm,ym);
+	glVertex2f(xmm,ymm);
+	glEnd();
+	click=1;
+	glFlush();
+
+}
+int main(int argc, char** argv)
+{
+	glutInit(&argc,argv);
+	glutInitDisplayMode(GLUT_SINGLE|GLUT_RGB);
+	glutInitWindowSize(500,500);
+	glutInitWindowPosition(0,0);
+	glutCreateWindow("simple");
+	glutDisplayFunc(display);
+	glutMouseFunc(mouse);
+	glutMotionFunc(move);
+    glEnable(GL_COLOR_LOGIC_OP);
+	init();
+	glutMainLoop();
+}
+
