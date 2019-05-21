@@ -1,0 +1,72 @@
+#include <GL/gl.h>
+#include <GL/glu.h>
+#include <GL/glut.h>
+#include<stdio.h>
+#include<stdlib.h>
+
+float ww=500,wh=500;
+float p,q;
+
+void display()
+{
+    	glClearColor(1,1,1,1);
+    	glClear(GL_COLOR_BUFFER_BIT);
+
+    	glColor3f(1,0,0);
+    	glBegin(GL_POLYGON);
+        	glVertex2f(100,100);
+        	glVertex2f(200,100);
+        	glVertex2f(200,200);
+        	glVertex2f(100,200);
+    	glEnd();
+
+    	glColor3f(0,1,0);
+    	glBegin(GL_LINE_LOOP);
+        	glVertex2f(5,5);
+        	glVertex2f(ww-5,5);
+        	glVertex2f(ww-5,wh-5);
+        	glVertex2f(5,wh-5);
+    	glEnd();
+
+    	glFlush();
+
+}
+
+void init()
+{
+    	glMatrixMode(GL_PROJECTION);
+        gluOrtho2D(0,ww,0,wh);
+    	glMatrixMode(GL_MODELVIEW);
+}
+
+void reshape(int w,int h)
+{
+	glViewport(0,0,w,h);
+
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	gluOrtho2D(0,w,0,h);
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+
+	ww=w;
+	wh=h;
+
+}
+
+
+int main(int argc,char **argv)
+{
+    glutInit(&argc,argv);
+    glutInitDisplayMode(GLUT_RGB|GLUT_SINGLE);
+
+    glutInitWindowPosition(0,0);
+    glutInitWindowSize(ww,wh);
+    glutCreateWindow("hello");
+    init();
+    glutReshapeFunc(reshape);
+    glutDisplayFunc(display);
+
+    glutMainLoop();
+    return 0;
+}
